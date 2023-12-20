@@ -1,0 +1,1 @@
+mysql -h your-rds-cluster-endpoint -u YourMasterUsername -p

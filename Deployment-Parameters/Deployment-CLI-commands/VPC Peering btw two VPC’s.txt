@@ -1,0 +1,10 @@
+aws ec2 create-vpc-peering-connection \
+  --vpc-id-1 vpc-id-of-shared-system-network \
+  --vpc-id-2 vpc-id-of-dev-system-network \
+  --peer-region us-east-1  # replace with the appropriate region if different
+
+
+
+# To create a instance for VPC
+
+aws ec2 accept-vpc-peering-connection --vpc-peering-connection-id peering-connection-id

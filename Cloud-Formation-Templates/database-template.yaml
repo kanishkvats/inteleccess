@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  DBInstanceIdentifier:
+    Description: "Identifier for the DB instance"
+    Type: String
+
+  MasterUsername:
+    Description: "Username for the master user"
+    Type: String
+
+  MasterUserPassword:
+    Description: "Password for the master user"
+    Type: String
+
+  VpcSecurityGroupId:
+    Description: "ID of the VPC security group to associate with the DB instance"
+    Type: String
+
+Resources:
+  RDSCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      Engine: aurora
+      EngineMode: serverless
+      MasterUsername: !Ref MasterUsername
+      MasterUserPassword: !Ref MasterUserPassword
+      VpcSecurityGroupIds:
+        - !Ref VpcSecurityGroupId
+      DBSubnetGroupName: "default"
+      EnableHttpEndpoint: true  # Enable for Aurora Serverless Data API
+      DeletionProtection: false  # Set to true if you want to enable deletion protection
+      ScalingConfiguration:
+        AutoPause: true
+        MinCapacity: 2  # Minimum capacity units when paused
+        MaxCapacity: 16  # Maximum capacity units when not paused
+        SecondsUntilAutoPause: 300  # Time in seconds before DB instance automatically pauses
+
+  DBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      Engine: aurora
+      DBInstanceIdentifier: !Ref DBInstanceIdentifier
+      DBClusterIdentifier: !Ref RDSCluster
+      MasterUsername: !Ref MasterUsername
+      MasterUserPassword: !Ref MasterUserPassword
+      VPCSecurityGroups:
+        - !Ref VpcSecurityGroupId
+      AllocatedStorage: 20  # Storage capacity in GB
+      DBInstanceClass: db.t2.small  # Instance type
+      PubliclyAccessible: false
+      DBSubnetGroupName: "default"
+      EnablePerformanceInsights: true
+      AutoMinorVersionUpgrade: true

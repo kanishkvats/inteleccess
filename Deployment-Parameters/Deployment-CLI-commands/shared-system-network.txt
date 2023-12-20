@@ -1,0 +1,4 @@
+aws cloudformation create-stack \
+  --stack-name shared-system-network \
+  --template-body C:\Users\devva\Desktop\intell-access\Cloud-Formation-Templates\vpc-template.yaml \
+  --parameters C:\Users\devva\Desktop\intell-access\Deployment-Parameters/vpc_parameters.json

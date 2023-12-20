@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  VpnClientCidr:
+    Description: "CIDR block for the VPN Client network"
+    Type: String
+    Default: "192.168.100.0/24"
+
+Resources:
+  # Customer Gateway represents the customer's VPN device.
+  CustomerGateway:
+    Type: AWS::EC2::CustomerGateway
+    Properties:
+      Type: ipsec.1
+      BgpAsn: 65000  
+
+  # Virtual Private Gateway represents the AWS side of the VPN connection.
+  VirtualPrivateGateway:
+    Type: AWS::EC2::VPNGateway
+    Properties:
+      Type: ipsec.1
+
+  # VPN Connection associates the Customer Gateway and Virtual Private Gateway.
+  VPNConnection:
+    Type: AWS::EC2::VPNConnection
+    Properties:
+      Type: ipsec.1
+      CustomerGatewayId: !Ref CustomerGateway
+      VpnGatewayId: !Ref VirtualPrivateGateway
+      StaticRoutesOnly: false  
+
+  # VPN Connection Route represents the route to the VPN Client network.
+  VPNConnectionRoute:
+    Type: AWS::EC2::VPNConnectionRoute
+    DependsOn: VPNConnection
+    Properties:
+      DestinationCidrBlock: !Ref VpnClientCidr
+      VpnConnectionId: !Ref VPNConnection

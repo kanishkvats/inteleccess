@@ -1,0 +1,8 @@
+aws cloudformation create-stack \
+  --stack-name aurora-serverless-db-stack \
+  --template-body file://path/to/your/rds_template.yaml \
+  --parameters ParameterKey=DBClusterIdentifier,ParameterValue=YourDBClusterIdentifier \
+               ParameterKey=MasterUsername,ParameterValue=YourMasterUsername \
+               ParameterKey=MasterUserPassword,ParameterValue=YourMasterUserPassword \
+               ParameterKey=VpcId,ParameterValue=YourVpcId \
+               ParameterKey=SubnetIds,ParameterValue="YourPrivateSubnetId1,YourPrivateSubnetId2"

@@ -1,0 +1,4 @@
+aws cloudformation create-stack \
+  --stack-name vpn-client-stack \
+  --template-body file://path/to/your/vpn_template.yaml \
+  --parameters file://path/to/your/vpn_parameters.json

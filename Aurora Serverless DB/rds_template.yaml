@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Parameters:
+  DBClusterIdentifier:
+    Description: "Identifier for the Aurora Serverless DB cluster"
+    Type: String
+
+  MasterUsername:
+    Description: "Username for the master user"
+    Type: String
+
+  MasterUserPassword:
+    Description: "Password for the master user"
+    Type: String
+
+  VpcId:
+    Description: "ID of the VPC"
+    Type: String
+
+  SubnetIds:
+    Description: "List of private subnet IDs"
+    Type: List<AWS::EC2::Subnet::Id>
+
+Resources:
+  RDSCluster:
+    Type: AWS::RDS::DBCluster
+    Properties:
+      Engine: aurora
+      DBClusterIdentifier: !Ref DBClusterIdentifier
+      MasterUsername: !Ref MasterUsername
+      MasterUserPassword: !Ref MasterUserPassword
+      VpcSecurityGroupIds:
+        - !Ref YourSecurityGroupId  # Replace with the actual security group ID for RDS
+      DBSubnetGroupName: "default"
+      EnableHttpEndpoint: true  # Enable for Aurora Serverless Data API
+      DeletionProtection: false  # Set to true if you want to enable deletion protection
+      ScalingConfiguration:
+        AutoPause: true
+        MinCapacity: 2  # Minimum capacity units when paused
+        MaxCapacity: 16  # Maximum capacity units when not paused
+        SecondsUntilAutoPause: 300  # Time in seconds before DB instance automatically pauses
+
+Outputs:
+  RDSClusterEndpoint:
+    Description: "Endpoint of the Aurora Serverless DB cluster"
+    Value: !GetAtt RDSCluster.Endpoint.Address

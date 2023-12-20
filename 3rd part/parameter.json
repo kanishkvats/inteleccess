@@ -1,0 +1,19 @@
+[
+    {
+      "ParameterKey": "VpnClientCidr",
+      "ParameterValue": "192.168.200.0/24"
+    },
+    {
+      "ParameterKey": "MasterUsername",
+      "ParameterValue": "YourVPNUsername"
+    },
+    {
+      "ParameterKey": "MasterUserPassword",
+      "ParameterValue": "YourVPNPassword"
+    },
+    {
+      "ParameterKey": "VpcSecurityGroupId",
+      "ParameterValue": "SecurityGroupIdOfSharedSystemNetwork"
+    }
+  ]
+  
